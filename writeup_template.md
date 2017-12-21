@@ -14,18 +14,18 @@ The goals / steps of this project are the following:
 * Analyze the softmax probabilities of the new images
 * Summarize the results with a written report
 
-
 [//]: # (Image References)
 
 [image1]: ./Writeup/train_distribution.jpg "Training distribution"
 [image2]: ./Writeup/valid_distribution.jpg "Validation distribution"
 [image3]: ./Writeup/test_distribution.jpg "Test distribution"
 [image4]: ./Writeup/augmentation_examples.jpg "Random Noise"
-[image5]: ./examples/placeholder.png "Traffic Sign 1"
-[image6]: ./examples/placeholder.png "Traffic Sign 2"
-[image7]: ./examples/placeholder.png "Traffic Sign 3"
-[image8]: ./examples/placeholder.png "Traffic Sign 4"
-[image9]: ./examples/placeholder.png "Traffic Sign 5"
+
+[image5]: ./Writeup/wild_animals.jpg "Traffic Sign 1"
+[image6]: ./Writeup/roadworks.jpg "Traffic Sign 2"
+[image7]: ./Writeup/speed_limit_30.jpg "Traffic Sign 3"
+[image8]: ./Writeup/ahead_only.jpg "Traffic Sign 4"
+[image9]: ./Writeup/right_of_way.jpg "Traffic Sign 5"
 
 Here is a link to my [project code](https://github.com/rjmoss/CarND-Traffic-Sign-Classifier-Project/Traffic_Sign_Classifier.ipynb)
 
@@ -80,7 +80,7 @@ Finally I normalised the data using `pixels/255.0 -0.5` (see Gotchas below) as n
 
 ### Model Architecture
 
-My final model consisted of the following layers:
+The model uses the LeNet architecture, tweaked slightly by adding a 4th colour channel (gray) and also dropout, with the final model consisting of the following layers:
 
 | Layer         		|     Description	        					| 
 |:----------------------|:----------------------------------------------| 
@@ -101,72 +101,66 @@ My final model consisted of the following layers:
 | 5. Fully connected 84 | output size 43								|
 | Softmax				| 												|
 
-#### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
+The model was trained over 100 epochs with a learning rate of 0.0002. The batch size was 128 and the Adam optimiser was used.
 
-To train the model, I used an ....
-
-#### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
+#### Results
+When the model was overfitting I added 2 dropout layers with a keep probability of 0.5 after the fully connected layers (note I didn't add dropout after the convolution layers as these were using max pooling). This probability value was chosen after trying out various values for keep prob and also for epochs. With more dropout, more epochs were used to train the model.
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
+* training set accuracy of 97.6%
+* validation set accuracy of 97.7%
+* test set accuracy of 94.8%
 
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
+The validation accuracy indicates that the model is training very well, without overfitting.
 
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
- 
-
-### Test a Model on New Images
-
-#### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
+### New Images
 
 Here are five German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
+![alt text][image5] ![alt text][image6] 
 ![alt text][image7] ![alt text][image8]
-
-The first image might be difficult to classify because ...
-
-#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
+![alt text][image9]
 
 Here are the results of the prediction:
 
-| Image			        |     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+Wild animals crossing
+0.939019       Wild animals crossing
+0.0602025      Double curve
+0.000404687    Beware of ice/snow
+0.000220869    Slippery road
+6.08666e-05    Dangerous curve to the left
 
+Road work
+0.991472      Road work
+0.00370821    Road narrows on the right
+0.00234303    Bicycles crossing
+0.00132036    Wild animals crossing
+0.000620258   Beware of ice/snow
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+Speed limit (30km/h)
+0.986294       Speed limit (30km/h)
+0.0137045      Speed limit (20km/h)
+8.4291e-07     Speed limit (50km/h)
+6.15099e-07    Speed limit (80km/h)
+1.70898e-07    Speed limit (100km/h)
 
-#### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
+Ahead only
+1.0            Ahead only
+2.52955e-09    Turn left ahead
+1.97352e-09    Turn right ahead
+3.11832e-11    Go straight or right
+9.21328e-15    Go straight or left
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+Right-of-way at the next intersection
+0.951196       Beware of ice/snow
+0.0458086      Bicycles crossing
+0.00244693     Right-of-way at the next intersection
+0.000314565    Children crossing
+9.82233e-05    Road narrows on the right
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+The model was able to correctly identify 4 out of the 5 signs (80% accuracy) however it is a little disappointing that it was not able to correctly identify the 'right of way at next intersection' example, and in fact put a strong confidence on 'Beware of ice/snow' instead.
 
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
-
-
-For the second image ... 
+When putting the bounding boxes around the roadsigns in the original images, it was clearly important to get the bounding box fairly accurate as the model doesn't seem very robust to the sign being off-centred, rotated or too small. Training with more examples from data augmentation with larger parameters of rotation, translation and zoom could fix this issue.
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 #### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
@@ -179,7 +173,8 @@ For the second image ...
 
 ### Gotchas:
 I spent quite a while stuck on this problem, with my accuracy not increasing above 60%, during which I combed through the forums trying to find answers and along the way found and fixed a few "gotchas" which can have a significant effect on the model:
-#### `cv2.COLOR_RGB2GRAY` vs `cv2.COLOR_BGR2GRAY`
+#### Greyscale
+`cv2.COLOR_RGB2GRAY` vs `cv2.COLOR_BGR2GRAY` ?
 I'm using `cv2.cvtColor()` to create the gray channel. The default for cv2 with `cv2.imread()` is to load as BGR. However, the pickled data was in the format RGB, and was loaded directly using numpy/pandas, so even though I was using cv2 to convert the color I was converting from RGB to gray. I verified this by comparing to `np.dot(img[...,:3], [0.299, 0.587, 0.114])` (which I could just have used originally instead!).
 #### Normalisation
 The normalisation recommended in the project of `(pixel - 128)/ 128` is actually erronous as using integers results in an overflow error (see [this](https://discussions.udacity.com/t/accuracy-is-not-going-over-75-80/314938/23)). Instead using `(pixel - 128.0)/ 128.0` (or alternatively `pixel/255.0 - 0.5` for range -0.5 to 0.5) should work correctly.
@@ -206,6 +201,3 @@ This meant that the final layer had a RELU activation, which it should not have 
 logits = tf.matmul(x, weights['layer5']) + biases['layer5']
 ```
 Once corrected the accuracy immediately sprung up to >85%.
-
-
-Finally worth saying that the advice in the forums and 
